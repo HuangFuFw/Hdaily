@@ -24,10 +24,12 @@ import java.util.List;
  */
 public class RecyclerViewAdapter extends Adapter<ViewHolder> {
     private static final int TYPE_ITEM = 0;
-    private static final int TYPE_HEADER = 1;
-    private static final int TYPE_FOOTER = 2;
+    private static final int TYPE_GROUPITEM = 1;
+    private static final int TYPE_HEADER = 2;
+    private static final int TYPE_FOOTER = 3;
     private Context context;
-    private List data;
+    private LayoutInflater mLayoutInflater;
+    private List<String> data;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -42,46 +44,56 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
     public RecyclerViewAdapter(Context context, List<String> data) {
         this.context = context;
         this.data = data;
+        mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
-            View view = LayoutInflater.from(context).inflate(R.layout.fragment_item_news, parent, false);
+            View view = mLayoutInflater.inflate(R.layout.fragment_item_news, parent, false);
             return new ItemViewHolder(view);
+        } else if (viewType == TYPE_GROUPITEM) {
+            View view = mLayoutInflater.inflate(R.layout.fragment_groupitem_news, parent,
+                    false);
+            return new GroupItemHolder(view);
         } else if (viewType == TYPE_FOOTER) {
-            View view = LayoutInflater.from(context).inflate(R.layout.fragment_item_footer, parent,
+            View view = mLayoutInflater.inflate(R.layout.fragment_item_footer, parent,
                     false);
             return new FooterViewHolder(view);
         } else if (viewType == TYPE_HEADER) {
-            View view = LayoutInflater.from(context).inflate(R.layout.fragment_item_header, parent,
+            View view = mLayoutInflater.inflate(R.layout.fragment_item_header, parent,
                     false);
             return new HeadererViewHolder(view);
         }
         return null;
     }
 
+    void bindNormalItem(int position, TextView newsTitle) {
+        if (onItemClickListener != null) {
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    int position = holder.getLayoutPosition();
+//                    onItemClickListener.onItemClick(holder.itemView, position);
+//                }
+//            });
+        }
+        newsTitle.setText(getItem(position));
+    }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        if (holder instanceof ItemViewHolder) {
-            if (onItemClickListener != null) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = holder.getLayoutPosition();
-                        onItemClickListener.onItemClick(holder.itemView, position);
-                    }
-                });
-            }
-            ((ItemViewHolder) holder).tvTitle.setText(data.get(position - 1).toString());
-        } else if (holder instanceof HeadererViewHolder) {
 
+        if (holder instanceof GroupItemHolder) {
+            bindNormalItem(position,((GroupItemHolder) holder).newsTitle);
+            ((GroupItemHolder) holder).newsTime.setText("这是分组标题");
+        } else if (holder instanceof ItemViewHolder) {
+            bindNormalItem(position, ((ItemViewHolder) holder).newsTitle);
+        } else if (holder instanceof HeadererViewHolder) {
             final List<String> urls = new ArrayList<>();
             urls.add("https://raw.githubusercontent.com/youth5201314/banner/master/image/1.png");
             urls.add("https://raw.githubusercontent.com/youth5201314/banner/master/image/2.png");
             urls.add("https://raw.githubusercontent.com/youth5201314/banner/master/image/4.png");
-
             ((HeadererViewHolder) holder).banner.setImageLoader(new FrescoImageLoader());
             ((HeadererViewHolder) holder).banner.setImages(urls);
             ((HeadererViewHolder) holder).banner.start();
@@ -95,6 +107,10 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
         return data.size() == 0 ? 0 : data.size() + 2;
     }
 
+    private String getItem(int position) {
+        return data.get(position - 1);
+    }
+
     @Override
     public int getItemViewType(int position) {
         if (position + 1 == getItemCount()) {
@@ -102,21 +118,45 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
         } else if (position == 0) {
             return TYPE_HEADER;
         } else {
-            return TYPE_ITEM;
+            if (position == 1)
+                return TYPE_GROUPITEM;
+
+//            String currentDate = get(position).getPublishDate();
+//            int prevIndex = position - 1;
+//            boolean isDifferent = !mDataList.get(prevIndex).getPublishDate().equals(currentDate);
+            boolean isDifferent = getItem(position).contains("title") ? true : false;
+            return isDifferent ? TYPE_GROUPITEM : TYPE_ITEM;
         }
     }
 
-    static class ItemViewHolder extends ViewHolder {
+    class ItemViewHolder extends ViewHolder {
 
-        TextView tvTitle;
+        TextView newsTitle;
+        ImageView newsIcon;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            newsTitle = (TextView) itemView.findViewById(R.id.base_swipe_item_title);
+            newsIcon = (ImageView) itemView.findViewById(R.id.base_swipe_item_icon);
+            itemView.findViewById(R.id.base_swipe_item_container).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
     }
 
-    static class HeadererViewHolder extends ViewHolder {
+    class GroupItemHolder extends ItemViewHolder {
+        TextView newsTime;
+
+        public GroupItemHolder(View itemView) {
+            super(itemView);
+            newsTime = (TextView) itemView.findViewById(R.id.base_swipe_group_item_time);
+        }
+    }
+
+    class HeadererViewHolder extends ViewHolder {
 
         Banner banner;
 
@@ -126,7 +166,7 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
         }
     }
 
-    static class FooterViewHolder extends ViewHolder {
+    class FooterViewHolder extends ViewHolder {
 
         public FooterViewHolder(View footerView) {
             super(footerView);

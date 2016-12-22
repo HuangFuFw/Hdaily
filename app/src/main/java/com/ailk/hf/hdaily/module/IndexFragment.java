@@ -43,6 +43,7 @@ public class IndexFragment extends Fragment {
     private Context mContext;
     private boolean isLoading;
     private int lastVisibleItemPosition;
+    private int firstVisibleItemPosition;
     private Handler handler = new Handler();
     private int totalItemCount;
     /**
@@ -91,6 +92,7 @@ public class IndexFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                firstVisibleItemPosition=layoutManager.findFirstCompletelyVisibleItemPosition();
                 mLoadMorePosition = lastVisibleItemPosition;
             }
 
@@ -151,13 +153,21 @@ public class IndexFragment extends Fragment {
 
     private void getLatestNews() {
         for (int i = 0; i < 2; i++) {
+            String str = "这是测试数据title1" + i;
+            data.add(str);
+        }
+        for (int i = 0; i < 3; i++) {
             String str = "这是测试数据" + i;
             data.add(str);
         }
+        for (int i = 0; i < 2; i++) {
+            String str = "这是测试数据title2" + i;
+            data.add(str);
+        }
 //        adapter.notifyItemRemoved(0);
-        adapter.notifyItemRemoved(mLoadMorePosition);
+//        adapter.notifyItemRemoved(mLoadMorePosition);
 //        adapter.notifyItemRangeChanged(0,mLoadMorePosition);
-        int i=adapter.getItemViewType(adapter.getItemCount());
+//        int i=adapter.getItemViewType(adapter.getItemCount());
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
 
