@@ -1,35 +1,27 @@
 package com.ailk.hf.hdaily.module;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.ailk.hf.hdaily.R;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.youth.banner.loader.ImageLoader;
+import com.ailk.hf.hdaily.app.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by huangfu on 2016/12/16 15.:23
  */
-public class IndexFragment extends Fragment {
+public class IndexFragment extends BaseFragment {
     //
 //    @Bind(R.id.banner)
 //    Banner banner;
@@ -43,31 +35,30 @@ public class IndexFragment extends Fragment {
     private Context mContext;
     private boolean isLoading;
     private int lastVisibleItemPosition;
-    private int firstVisibleItemPosition;
     private Handler handler = new Handler();
-    private int totalItemCount;
     /**
      * 标记加载更多的position
      */
     private int mLoadMorePosition;
 
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.fragment_index, container, false);
+//        ButterKnife.bind(this, view);
+//        initView();
+//        initData();
+////        initBanner();
+//        return view;
+//    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_index, container, false);
-        ButterKnife.bind(this, view);
-        initView();
-        initData();
-//        initBanner();
-        return view;
+    protected int getLayoutId() {
+        return R.layout.fragment_index;
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        this.mContext = activity;
-        super.onAttach(activity);
-    }
+    protected void initView(View view, Bundle savedInstanceState) {
 
-    private void initView() {
         swipeRefreshLayout.setColorSchemeColors(R.color.colorPrimary);
         swipeRefreshLayout.post(new Runnable() {
             @Override
@@ -84,7 +75,7 @@ public class IndexFragment extends Fragment {
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recylerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerViewAdapter(mContext, data);
+        adapter = new RecyclerViewAdapter(mActivity, data);
         recylerView.setAdapter(adapter);
         recylerView.setItemAnimator(new DefaultItemAnimator());
         recylerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -92,7 +83,6 @@ public class IndexFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
-                firstVisibleItemPosition=layoutManager.findFirstCompletelyVisibleItemPosition();
                 mLoadMorePosition = lastVisibleItemPosition;
             }
 
@@ -127,22 +117,24 @@ public class IndexFragment extends Fragment {
             }
         });
 
+
+    }
+//
+//    @Override
+//    public void onAttach(Activity activity) {
+//        this.mContext = activity;
+//        super.onAttach(activity);
+//    }
+
+
+
+
+    private void initView() {
+
     }
 
-
-    private void initBanner() {
-        final List<String> urls = new ArrayList<>();
-        urls.add("https://raw.githubusercontent.com/youth5201314/banner/master/image/1.png");
-        urls.add("https://raw.githubusercontent.com/youth5201314/banner/master/image/2.png");
-        urls.add("https://raw.githubusercontent.com/youth5201314/banner/master/image/4.png");
-
-//        banner.setImageLoader(new FrescoImageLoader());
-//        banner.setImages(urls);
-//        banner.start();
-    }
-
-
-    public void initData() {
+    @Override
+    protected void initData() {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -173,24 +165,10 @@ public class IndexFragment extends Fragment {
 
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        ButterKnife.unbind(this);
+//    }
 
-    class FrescoImageLoader extends ImageLoader {
-        @Override
-        public void displayImage(Context context, Object path, ImageView imageView) {
-            //用fresco加载图片
-            Uri uri = Uri.parse((String) path);
-            imageView.setImageURI(uri);
-        }
-
-        @Override
-        public ImageView createImageView(Context context) {
-            SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
-            return simpleDraweeView;
-        }
-    }
 }
