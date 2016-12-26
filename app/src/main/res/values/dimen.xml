@@ -3,6 +3,12 @@
     <dimen name="title_height">48dip</dimen>
     <dimen name="margin_5">5dip</dimen>
     <dimen name="margin_10">10dip</dimen>
-    <dimen name="margin_20">20dip</dimen>
+    <dimen name="margin_20">30dip</dimen>
+    <dimen name="margin_30">20dip</dimen>
     <dimen name="margin_40">40dip</dimen>
+
+    <dimen name="main_drawer_size">16sp</dimen>
+    <dimen name="ActionBar_title_size">20sp</dimen>
+
+
 </resources>

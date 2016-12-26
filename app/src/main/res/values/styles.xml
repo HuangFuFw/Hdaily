@@ -5,8 +5,20 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#FF03A9FF</item>
         <item name="colorPrimaryDark">#FF0288F1</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <!--返回键样式-->
+        <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowToggle</item>
     </style>
 
     <style name="AppTheme" parent="AppTheme.Base"></style>
+
+    <style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
+    <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="commonTxt">
+        <item name="android:textSize">@dimen/main_drawer_size</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
 </resources>

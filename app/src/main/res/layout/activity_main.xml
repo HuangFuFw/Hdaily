@@ -24,11 +24,11 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <TextView
-        android:text="jjjjjj"
-        android:background="#fff000"
+    <fragment
+        android:id="@+id/theme_drawer"
+        android:name="com.ailk.hf.hdaily.module.ThemeFragment"
         android:layout_gravity="start"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
 </android.support.v4.widget.DrawerLayout>
