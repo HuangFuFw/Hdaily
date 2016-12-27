@@ -1,13 +1,13 @@
 package com.ailk.hf.hdaily.module;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.ailk.hf.hdaily.R;
@@ -112,8 +112,8 @@ public class IndexFragment extends BaseFragment {
 
         adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                Log.d("test", "item position = " + position);
+            public void onItemClick(int position) {
+                getActivity().startActivity(new Intent(getActivity(),NewsDetailsActivity.class));
             }
         });
 

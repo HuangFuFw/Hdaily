@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ailk.hf.hdaily.R;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerClickListener;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
     private List<String> data;
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(int position);
     }
 
     private OnItemClickListener onItemClickListener;
@@ -68,27 +70,27 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
         return null;
     }
 
-    void bindNormalItem(int position, TextView newsTitle) {
+    void bindNormalItem(final int position, TextView newsTitle, LinearLayout newsContainer) {
         if (onItemClickListener != null) {
-//            holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int position = holder.getLayoutPosition();
-//                    onItemClickListener.onItemClick(holder.itemView, position);
-//                }
-//            });
+            newsContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onItemClick(position);
+                }
+            });
         }
         newsTitle.setText(getItem(position));
     }
+
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
         if (holder instanceof GroupItemHolder) {
-            bindNormalItem(position,((GroupItemHolder) holder).newsTitle);
+            bindNormalItem(position,((GroupItemHolder) holder).newsTitle,((GroupItemHolder) holder).newsContainer);
             ((GroupItemHolder) holder).newsTime.setText("这是分组标题");
         } else if (holder instanceof ItemViewHolder) {
-            bindNormalItem(position, ((ItemViewHolder) holder).newsTitle);
+            bindNormalItem(position, ((ItemViewHolder) holder).newsTitle,((ItemViewHolder) holder).newsContainer);
         } else if (holder instanceof HeadererViewHolder) {
             final List<String> urls = new ArrayList<>();
             urls.add("https://raw.githubusercontent.com/youth5201314/banner/master/image/1.png");
@@ -97,6 +99,13 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
             ((HeadererViewHolder) holder).banner.setImageLoader(new FrescoImageLoader());
             ((HeadererViewHolder) holder).banner.setImages(urls);
             ((HeadererViewHolder) holder).banner.start();
+            ((HeadererViewHolder) holder).banner.setOnBannerClickListener(new OnBannerClickListener() {
+                @Override
+                public void OnBannerClick(int position) {
+
+
+                }
+            });
         }
 
     }
@@ -133,17 +142,13 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
 
         TextView newsTitle;
         ImageView newsIcon;
+        LinearLayout newsContainer;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            newsTitle = (TextView) itemView.findViewById(R.id.base_swipe_item_title);
-            newsIcon = (ImageView) itemView.findViewById(R.id.base_swipe_item_icon);
-            itemView.findViewById(R.id.base_swipe_item_container).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
+            newsTitle = (TextView) itemView.findViewById(R.id.frame_main_item_title);
+            newsIcon = (ImageView) itemView.findViewById(R.id.frame_main_item_icon);
+            newsContainer = (LinearLayout) itemView.findViewById(R.id.frame_main_item_container);
         }
     }
 
@@ -152,12 +157,11 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
 
         public GroupItemHolder(View itemView) {
             super(itemView);
-            newsTime = (TextView) itemView.findViewById(R.id.base_swipe_group_item_time);
+            newsTime = (TextView) itemView.findViewById(R.id.frame_main_group_item_time);
         }
     }
 
     class HeadererViewHolder extends ViewHolder {
-
         Banner banner;
 
         public HeadererViewHolder(View headerView) {

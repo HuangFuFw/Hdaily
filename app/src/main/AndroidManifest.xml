@@ -19,6 +19,7 @@
         </activity>
 
         <activity android:name=".module.MainActivity"/>
+        <activity android:name=".module.NewsDetailsActivity"/>
         <!--<activity android:name=".module.SplashActivity"/>-->
 
     </application>

@@ -11,7 +11,7 @@
     app:elevation="1dp">
 
         <LinearLayout
-            android:id="@+id/base_swipe_item_container"
+            android:id="@+id/frame_main_item_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
@@ -19,7 +19,7 @@
             android:padding="5dp">
 
                 <TextView
-                    android:id="@+id/base_swipe_item_title"
+                    android:id="@+id/frame_main_item_title"
                     android:layout_width="0dp"
                     android:layout_height="100dp"
                     android:layout_weight="1"
@@ -28,7 +28,7 @@
                     android:textSize="21sp" />
 
                 <com.facebook.drawee.view.SimpleDraweeView
-                    android:id="@+id/base_swipe_item_icon"
+                    android:id="@+id/frame_main_item_icon"
                     android:layout_width="90dp"
                     android:layout_height="90dp"
                     android:layout_gravity="center_vertical|right" />
