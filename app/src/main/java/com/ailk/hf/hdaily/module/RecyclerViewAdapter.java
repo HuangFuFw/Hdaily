@@ -12,8 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ailk.hf.hdaily.R;
+import com.ailk.hf.hdaily.model.NewsDetailInfo;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerClickListener;
 import com.youth.banner.loader.ImageLoader;
 
@@ -31,7 +33,11 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
     private static final int TYPE_FOOTER = 3;
     private Context context;
     private LayoutInflater mLayoutInflater;
-    private List<String> data;
+    private List<NewsDetailInfo> data;
+    private List<NewsDetailInfo> topData;
+//    private List<String> dates = new ArrayList<>();
+//    private String currentDate;
+//    private String prevDate;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -43,10 +49,22 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public RecyclerViewAdapter(Context context, List<String> data) {
+    public RecyclerViewAdapter(Context context, List<NewsDetailInfo> data) {
         this.context = context;
         this.data = data;
         mLayoutInflater = LayoutInflater.from(context);
+    }
+
+//    public void putDate(String date, boolean isFirst) {
+//        this.currentDate = date;
+//        dates.add(date);
+//        if (isFirst) {
+//            this.prevDate = currentDate;
+//        }
+//    }
+
+    public void setTopData(List<NewsDetailInfo> topData) {
+        this.topData = topData;
     }
 
     @Override
@@ -70,7 +88,7 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
         return null;
     }
 
-    void bindNormalItem(final int position, TextView newsTitle, LinearLayout newsContainer) {
+    void bindNormalItem(final int position, TextView newsTitle, SimpleDraweeView newsIcon, LinearLayout newsContainer) {
         if (onItemClickListener != null) {
             newsContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,25 +97,29 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
                 }
             });
         }
-        newsTitle.setText(getItem(position));
+        newsTitle.setText(getItem(position).getTitle());
+        newsIcon.setImageURI(getItem(position).getImages().get(0));
     }
 
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-
         if (holder instanceof GroupItemHolder) {
-            bindNormalItem(position,((GroupItemHolder) holder).newsTitle,((GroupItemHolder) holder).newsContainer);
-            ((GroupItemHolder) holder).newsTime.setText("这是分组标题");
+            bindNormalItem(position, ((GroupItemHolder) holder).newsTitle, ((ItemViewHolder) holder).newsIcon, ((GroupItemHolder) holder).newsContainer);
+            ((GroupItemHolder) holder).newsTime.setText(getItem(position).getDate());
         } else if (holder instanceof ItemViewHolder) {
-            bindNormalItem(position, ((ItemViewHolder) holder).newsTitle,((ItemViewHolder) holder).newsContainer);
+            bindNormalItem(position, ((ItemViewHolder) holder).newsTitle, ((ItemViewHolder) holder).newsIcon, ((ItemViewHolder) holder).newsContainer);
         } else if (holder instanceof HeadererViewHolder) {
             final List<String> urls = new ArrayList<>();
-            urls.add("https://raw.githubusercontent.com/youth5201314/banner/master/image/1.png");
-            urls.add("https://raw.githubusercontent.com/youth5201314/banner/master/image/2.png");
-            urls.add("https://raw.githubusercontent.com/youth5201314/banner/master/image/4.png");
+            final List<String> titles = new ArrayList<>();
+            for (int i = 0; i < topData.size(); i++) {
+                urls.add(topData.get(i).getImage());
+                titles.add(topData.get(i).getTitle());
+            }
             ((HeadererViewHolder) holder).banner.setImageLoader(new FrescoImageLoader());
             ((HeadererViewHolder) holder).banner.setImages(urls);
+            ((HeadererViewHolder) holder).banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE);
+            ((HeadererViewHolder) holder).banner.setBannerTitles(titles);
             ((HeadererViewHolder) holder).banner.start();
             ((HeadererViewHolder) holder).banner.setOnBannerClickListener(new OnBannerClickListener() {
                 @Override
@@ -116,7 +138,7 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
         return data.size() == 0 ? 0 : data.size() + 2;
     }
 
-    private String getItem(int position) {
+    private NewsDetailInfo getItem(int position) {
         return data.get(position - 1);
     }
 
@@ -130,24 +152,23 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
             if (position == 1)
                 return TYPE_GROUPITEM;
 
-//            String currentDate = get(position).getPublishDate();
-//            int prevIndex = position - 1;
-//            boolean isDifferent = !mDataList.get(prevIndex).getPublishDate().equals(currentDate);
-            boolean isDifferent = getItem(position).contains("title") ? true : false;
-            return isDifferent ? TYPE_GROUPITEM : TYPE_ITEM;
+            String currentDate = getItem(position).getDate();
+            int prevIndex = position - 1;
+            boolean isAddGroup = !getItem(prevIndex).getDate().equals(currentDate);
+            return isAddGroup ? TYPE_GROUPITEM : TYPE_ITEM;
         }
     }
 
     class ItemViewHolder extends ViewHolder {
 
         TextView newsTitle;
-        ImageView newsIcon;
+        SimpleDraweeView newsIcon;
         LinearLayout newsContainer;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             newsTitle = (TextView) itemView.findViewById(R.id.frame_main_item_title);
-            newsIcon = (ImageView) itemView.findViewById(R.id.frame_main_item_icon);
+            newsIcon = (SimpleDraweeView) itemView.findViewById(R.id.frame_main_item_icon);
             newsContainer = (LinearLayout) itemView.findViewById(R.id.frame_main_item_container);
         }
     }

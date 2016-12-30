@@ -1,5 +1,6 @@
 package com.ailk.hf.hdaily.module.welcome;
 
+import com.ailk.hf.hdaily.model.LatestNews;
 import com.ailk.hf.hdaily.model.SplashInfo;
 import com.ailk.hf.hdaily.utils.RetrofitUtil;
 
@@ -15,6 +16,11 @@ public class MyWrapper extends RetrofitUtil {
     public Observable<SplashInfo> getSplashInfo() {
         return getService().getSplashInfo()
              .compose(this.<SplashInfo>applySchedule());
+    }
+
+    public Observable<LatestNews> getLatestNews() {
+        return getService().getLatestNews()
+                .compose(this.<LatestNews>applySchedule());
     }
 
 

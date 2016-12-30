@@ -1,6 +1,7 @@
 package com.ailk.hf.hdaily.module.welcome;
 
 
+import com.ailk.hf.hdaily.model.LatestNews;
 import com.ailk.hf.hdaily.model.SplashInfo;
 
 import retrofit2.http.GET;
@@ -13,6 +14,9 @@ public interface MyService {
 
     @GET("start-image/1080*1776")
     Observable<SplashInfo> getSplashInfo();
+
+    @GET("news/latest")
+    Observable<LatestNews> getLatestNews();
 
 //    Observable<Response<SplashInfo>> getS(@Field("name") String type);
 }

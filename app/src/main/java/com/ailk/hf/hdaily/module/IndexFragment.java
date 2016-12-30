@@ -1,6 +1,5 @@
 package com.ailk.hf.hdaily.module;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,27 +11,30 @@ import android.view.View;
 
 import com.ailk.hf.hdaily.R;
 import com.ailk.hf.hdaily.app.BaseFragment;
+import com.ailk.hf.hdaily.model.LatestNews;
+import com.ailk.hf.hdaily.model.NewsDetailInfo;
+import com.ailk.hf.hdaily.module.welcome.MyWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by huangfu on 2016/12/16 15.:23
  */
 public class IndexFragment extends BaseFragment {
-    //
-//    @Bind(R.id.banner)
-//    Banner banner;
     @Bind(R.id.recylerView)
     RecyclerView recylerView;
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    private List<String> data = new ArrayList<>();
+    private List<NewsDetailInfo> data = new ArrayList<>();
+    private List<NewsDetailInfo> topData = new ArrayList<>();
+    private String date = null;
     private RecyclerViewAdapter adapter;
-    private Context mContext;
     private boolean isLoading;
     private int lastVisibleItemPosition;
     private Handler handler = new Handler();
@@ -40,6 +42,7 @@ public class IndexFragment extends BaseFragment {
      * 标记加载更多的position
      */
     private int mLoadMorePosition;
+    private String latestDate;
 
 //    @Override
 //    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,14 +86,13 @@ public class IndexFragment extends BaseFragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
-                mLoadMorePosition = lastVisibleItemPosition;
             }
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        &&lastVisibleItemPosition + 1 == layoutManager.getItemCount()) {
+                        && lastVisibleItemPosition + 1 == layoutManager.getItemCount()) {
                     boolean isRefreshing = swipeRefreshLayout.isRefreshing();
                     if (isRefreshing) {
                         adapter.notifyItemRemoved(adapter.getItemCount());
@@ -113,56 +115,48 @@ public class IndexFragment extends BaseFragment {
         adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                getActivity().startActivity(new Intent(getActivity(),NewsDetailsActivity.class));
+                getActivity().startActivity(new Intent(getActivity(), NewsDetailsActivity.class));
             }
         });
 
 
     }
-//
-//    @Override
-//    public void onAttach(Activity activity) {
-//        this.mContext = activity;
-//        super.onAttach(activity);
-//    }
 
-
-
-
-    private void initView() {
-
-    }
 
     @Override
     protected void initData() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getLatestNews();
-            }
-        }, 1500);
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+        getLatestNews();
+//            }
+//        }, 1500);
     }
 
     private void getLatestNews() {
-        for (int i = 0; i < 2; i++) {
-            String str = "这是测试数据title1" + i;
-            data.add(str);
-        }
-        for (int i = 0; i < 3; i++) {
-            String str = "这是测试数据" + i;
-            data.add(str);
-        }
-        for (int i = 0; i < 2; i++) {
-            String str = "这是测试数据title2" + i;
-            data.add(str);
-        }
-//        adapter.notifyItemRemoved(0);
-//        adapter.notifyItemRemoved(mLoadMorePosition);
-//        adapter.notifyItemRangeChanged(0,mLoadMorePosition);
-//        int i=adapter.getItemViewType(adapter.getItemCount());
-        adapter.notifyDataSetChanged();
-        swipeRefreshLayout.setRefreshing(false);
+        MyWrapper wrapper = new MyWrapper();
+        Subscription subscription = wrapper.getLatestNews().subscribe(newSubscriber(new Action1<LatestNews>() {
+            @Override
+            public void call(LatestNews info) {
+                latestDate = info.getDate();
 
+                if (!latestDate.equals(date)) {
+                    data.addAll(info.getStories());
+                } else if (data.size() == 0) {
+                    data.addAll(info.getStories());
+                }
+
+                for (int i = 0; i < info.getStories().size(); i++) {
+                    info.getStories().get(i).setDate(latestDate);
+                }
+
+                date = latestDate;
+                adapter.setTopData(info.getTop_stories());
+                adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        }));
+        mCompositeSubscription.add(subscription);
     }
 
 //    @Override
