@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ailk.hf.hdaily.R;
-import com.ailk.hf.hdaily.model.NewsDetailInfo;
+import com.ailk.hf.hdaily.model.NewsInfo;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -33,8 +33,8 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
     private static final int TYPE_FOOTER = 3;
     private Context context;
     private LayoutInflater mLayoutInflater;
-    private List<NewsDetailInfo> data;
-    private List<NewsDetailInfo> topData;
+    private List<NewsInfo> data;
+    private List<NewsInfo> topData;
 //    private List<String> dates = new ArrayList<>();
 //    private String currentDate;
 //    private String prevDate;
@@ -49,7 +49,7 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public RecyclerViewAdapter(Context context, List<NewsDetailInfo> data) {
+    public RecyclerViewAdapter(Context context, List<NewsInfo> data) {
         this.context = context;
         this.data = data;
         mLayoutInflater = LayoutInflater.from(context);
@@ -63,7 +63,7 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
 //        }
 //    }
 
-    public void setTopData(List<NewsDetailInfo> topData) {
+    public void setTopData(List<NewsInfo> topData) {
         this.topData = topData;
     }
 
@@ -138,7 +138,7 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
         return data.size() == 0 ? 0 : data.size() + 2;
     }
 
-    private NewsDetailInfo getItem(int position) {
+    private NewsInfo getItem(int position) {
         return data.get(position - 1);
     }
 

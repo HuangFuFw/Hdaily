@@ -59,6 +59,12 @@ public class MainActivity extends BaseActivity {
         toggle.syncState();
         dragLayout.setDrawerListener(toggle);
     }
+    public void setToolbarTitle(String text) {
+        toolbar.setTitle(text);
+    }
+    public void closeMenu() {
+        dragLayout.closeDrawers();
+    }
 
 
     @Override

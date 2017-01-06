@@ -12,7 +12,7 @@ import android.view.View;
 import com.ailk.hf.hdaily.R;
 import com.ailk.hf.hdaily.app.BaseFragment;
 import com.ailk.hf.hdaily.model.LatestNews;
-import com.ailk.hf.hdaily.model.NewsDetailInfo;
+import com.ailk.hf.hdaily.model.NewsInfo;
 import com.ailk.hf.hdaily.module.welcome.MyWrapper;
 
 import java.util.ArrayList;
@@ -31,8 +31,8 @@ public class IndexFragment extends BaseFragment {
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    private List<NewsDetailInfo> data = new ArrayList<>();
-    private List<NewsDetailInfo> topData = new ArrayList<>();
+    private List<NewsInfo> data = new ArrayList<>();
+    private List<NewsInfo> topData = new ArrayList<>();
     private String date = null;
     private RecyclerViewAdapter adapter;
     private boolean isLoading;
@@ -115,7 +115,10 @@ public class IndexFragment extends BaseFragment {
         adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                getActivity().startActivity(new Intent(getActivity(), NewsDetailsActivity.class));
+                Intent intent=new Intent(getActivity(), NewsDetailsActivity.class);
+                intent.putExtra("id",data.get(position).getId());
+                getActivity().startActivity(intent);
+//              getActivity().startActivity(new Intent(getActivity(), NewsDetailsActivity.class));
             }
         });
 

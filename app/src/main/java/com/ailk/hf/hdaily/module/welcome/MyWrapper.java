@@ -1,7 +1,10 @@
 package com.ailk.hf.hdaily.module.welcome;
 
 import com.ailk.hf.hdaily.model.LatestNews;
+import com.ailk.hf.hdaily.model.NewsDetailInfo;
 import com.ailk.hf.hdaily.model.SplashInfo;
+import com.ailk.hf.hdaily.model.ThemesDailyInfo;
+import com.ailk.hf.hdaily.model.ThemesDailyList;
 import com.ailk.hf.hdaily.utils.RetrofitUtil;
 
 import rx.Observable;
@@ -23,6 +26,20 @@ public class MyWrapper extends RetrofitUtil {
                 .compose(this.<LatestNews>applySchedule());
     }
 
+    public Observable<NewsDetailInfo> getNewsDetailInfo(String id) {
+        return getService().getNewsDetailInfo(id)
+                .compose(this.<NewsDetailInfo>applySchedule());
+    }
+
+    public Observable<ThemesDailyList> getThemesDailyList() {
+        return getService().getThemesDailyList()
+                .compose(this.<ThemesDailyList>applySchedule());
+    }
+
+    public Observable<ThemesDailyInfo> getDailyDetailInfo(String id) {
+        return getService().getDailyDetailInfo(id)
+                .compose(this.<ThemesDailyInfo>applySchedule());
+    }
 
 //    public Observable<SplashInfo> getSplashInfo() {
 //        return getService().getSplashInfo()

@@ -7,8 +7,8 @@ import java.util.List;
  */
 public class LatestNews {
     private String date;
-    private List<NewsDetailInfo> stories;
-    private List<NewsDetailInfo> top_stories;
+    private List<NewsInfo> stories;
+    private List<NewsInfo> top_stories;
 
     public String getDate() {
         return date;
@@ -18,19 +18,19 @@ public class LatestNews {
         this.date = date;
     }
 
-    public List<NewsDetailInfo> getStories() {
+    public List<NewsInfo> getStories() {
         return stories;
     }
 
-    public void setStories(List<NewsDetailInfo> stories) {
+    public void setStories(List<NewsInfo> stories) {
         this.stories = stories;
     }
 
-    public List<NewsDetailInfo> getTop_stories() {
+    public List<NewsInfo> getTop_stories() {
         return top_stories;
     }
 
-    public void setTop_stories(List<NewsDetailInfo> top_stories) {
+    public void setTop_stories(List<NewsInfo> top_stories) {
         this.top_stories = top_stories;
     }
 }

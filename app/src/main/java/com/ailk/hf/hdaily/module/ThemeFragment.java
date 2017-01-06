@@ -8,12 +8,17 @@ import android.widget.TextView;
 
 import com.ailk.hf.hdaily.R;
 import com.ailk.hf.hdaily.app.BaseFragment;
+import com.ailk.hf.hdaily.model.ThemesDaily;
+import com.ailk.hf.hdaily.model.ThemesDailyList;
+import com.ailk.hf.hdaily.module.welcome.MyWrapper;
 import com.ailk.hf.hdaily.widget.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by huangfu on 2016/12/23 16.:02
@@ -30,7 +35,7 @@ public class ThemeFragment extends BaseFragment {
     @Bind(R.id.rv_theme_menu)
     RecyclerView rvThemeMenu;
 
-    private List<String> data = new ArrayList<>();
+    private List<ThemesDaily> data = new ArrayList<>();
     private RecyclerViewMenuAdapter adapter;
 
     @Override
@@ -44,27 +49,54 @@ public class ThemeFragment extends BaseFragment {
         rvThemeMenu.setLayoutManager(layoutManager);
         adapter = new RecyclerViewMenuAdapter(mActivity, data);
         rvThemeMenu.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new RecyclerViewMenuAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                getFragmentManager()
+                        .beginTransaction()
+// .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+                        .replace(
+                                R.id.frame_main,
+                                ThemesDailyFragment.newInstance(data.get(position)
+                                        .getId(), data.get(position).getName()), "ThemesDaily").commit();
+
+                ((MainActivity) mActivity).closeMenu();
+
+            }
+        });
     }
+
+//    public void switchContent() {
+//        if ()
+//
+//        getFragmentManager()
+//                .beginTransaction()
+//// .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+//                .replace(
+//                        R.id.frame_main,
+//                        ThemesDailyFragment.newInstance(data.get(position)
+//                                .getId(), data.get(position).getName()), "ThemesDaily").commit();
+//
+//        ((MainActivity) mActivity).closeMenu();
+//
+//                ft.hide(from).add(R.id.frame_main, to).commit(); // 隐藏当前的fragment，add下一个到Activity中
+//
+//    }
 
     @Override
     protected void initData() {
-        for (int i = 0; i < 2; i++) {
-            String str = "这是测试数据title1" + i;
-            data.add(str);
-        }
-        for (int i = 0; i < 3; i++) {
-            String str = "这是测试数据" + i;
-            data.add(str);
-        }
-        for (int i = 0; i < 2; i++) {
-            String str = "这是测试数据title2" + i;
-            data.add(str);
-        }
-//        adapter.notifyItemRemoved(0);
-//        adapter.notifyItemRemoved(mLoadMorePosition);
-//        adapter.notifyItemRangeChanged(0,mLoadMorePosition);
-//        int i=adapter.getItemViewType(adapter.getItemCount());
-        adapter.notifyDataSetChanged();
+        MyWrapper wrapper = new MyWrapper();
+        Subscription subscription = wrapper.getThemesDailyList().subscribe(newSubscriber(new Action1<ThemesDailyList>() {
+            @Override
+            public void call(ThemesDailyList info) {
+                if (data.size() > 0)
+                    data.clear();
+                data.addAll(info.getOthers());
+                adapter.notifyDataSetChanged();
 
+            }
+        }));
+        mCompositeSubscription.add(subscription);
     }
 }

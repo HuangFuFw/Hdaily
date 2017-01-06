@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ailk.hf.hdaily.R;
+import com.ailk.hf.hdaily.model.ThemesDaily;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.youth.banner.loader.ImageLoader;
 
@@ -27,7 +28,7 @@ public class RecyclerViewMenuAdapter extends Adapter<ViewHolder> {
     private static final int TYPE_HEADER = 2;
     private Context context;
     private LayoutInflater mLayoutInflater;
-    private List<String> data;
+    private List<ThemesDaily> data;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -39,7 +40,7 @@ public class RecyclerViewMenuAdapter extends Adapter<ViewHolder> {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public RecyclerViewMenuAdapter(Context context, List<String> data) {
+    public RecyclerViewMenuAdapter(Context context, List<ThemesDaily> data) {
         this.context = context;
         this.data = data;
         mLayoutInflater = LayoutInflater.from(context);
@@ -54,17 +55,21 @@ public class RecyclerViewMenuAdapter extends Adapter<ViewHolder> {
             View view = mLayoutInflater.inflate(R.layout.fragment_item_menu, parent, false);
             return new ItemViewHolder(view);
         }
-
     }
 
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         if(holder instanceof HeadererViewHolder){
 
         }else {
-            ((ItemViewHolder)holder).txtDrawerItemTitle.setText(getItem(position));
-
+            ((ItemViewHolder)holder).txtDrawerItemTitle.setText(getItem(position).getName());
+            ((ItemViewHolder)holder).txtDrawerItemTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onItemClick(v,position);
+                }
+            });
         }
 
     }
@@ -75,7 +80,7 @@ public class RecyclerViewMenuAdapter extends Adapter<ViewHolder> {
         return data.size() + 1;
     }
 
-    private String getItem(int position) {
+    private ThemesDaily getItem(int position) {
         return data.get(position - 1);
     }
 

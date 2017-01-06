@@ -13,7 +13,6 @@
         android:id="@+id/txt_drawer_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="日常心理"
         android:layout_centerVertical="true"
         android:textColor="@color/cardview_dark_background"
         android:textSize="18sp" />
