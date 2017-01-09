@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.ailk.hf.hdaily.R;
 import com.ailk.hf.hdaily.model.DailyEditorsInfo;
 import com.ailk.hf.hdaily.model.NewsInfo;
+import com.ailk.hf.hdaily.utils.LinearLayoutManagerPlus;
+import com.ailk.hf.hdaily.widget.CircleImageView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
@@ -111,12 +113,14 @@ public class ThemesDailyRecyclerViewAdapter extends Adapter<ViewHolder> {
             Uri uri = Uri.parse(themeDailyBgUrl);
             ((HeadererViewHolder) holder).themeDailyImg.setImageURI(uri);
 
-            final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-            ((HeadererViewHolder) holder).editorsInfoRv.setLayoutManager(layoutManager);
-//            layoutManager.setOrientation(OrientationHelper.HORIZONTAL);
-            editorsAdapter = new EditorsRecyclerAdapter(context, editorsInfoList);
-            ((HeadererViewHolder) holder).editorsInfoRv.setAdapter(editorsAdapter);
-            editorsAdapter.notifyDataSetChanged();
+            ((HeadererViewHolder) holder).editorsInfoRv.setLayoutManager(new LinearLayoutManagerPlus(context, LinearLayoutManager.HORIZONTAL,false));
+            ((HeadererViewHolder) holder).editorsInfoRv.setAdapter(new EditorsRecyclerAdapter(context,editorsInfoList));
+//            final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+//            ((HeadererViewHolder) holder).editorsInfoRv.setLayoutManager(layoutManager);
+////            layoutManager.setOrientation(OrientationHelper.HORIZONTAL);
+//            editorsAdapter = new EditorsRecyclerAdapter(context, editorsInfoList);
+//            ((HeadererViewHolder) holder).editorsInfoRv.setAdapter(editorsAdapter);
+//            editorsAdapter.notifyDataSetChanged();
 
         }
 
@@ -162,24 +166,14 @@ public class ThemesDailyRecyclerViewAdapter extends Adapter<ViewHolder> {
     class HeadererViewHolder extends ViewHolder {
         SimpleDraweeView themeDailyImg;
         RecyclerView editorsInfoRv;
-
-//        public void refreshData(List<DailyEditorsInfo> data, int position) {
-//            editorsInfoList = data;
-//            ViewGroup.LayoutParams layoutParams = editorsInfoRv.getLayoutParams();
-//            //高度等于＝条目的高度＋ 10dp的间距 ＋ 10dp（为了让条目居中）
-//            layoutParams.height = screenWidth / 3 + dip2px(20);
-//            hor_recyclerview.setLayoutParams(layoutParams);
-//            hor_recyclerview.setLayoutManager(new LinearLayoutManager(RyRyActivity.this, LinearLayoutManager.HORIZONTAL, false));
-//            hor_recyclerview.setBackgroundResource(R.color.colorAccent);
-//            hor_recyclerview.setAdapter(new HorizontalAdapter());
-//
-//        }
+        private List<DailyEditorsInfo> editorsInfos;
 
         public HeadererViewHolder(View headerView) {
             super(headerView);
             themeDailyImg = (SimpleDraweeView) headerView.findViewById(R.id.themedaily_img);
             editorsInfoRv = (RecyclerView) headerView.findViewById(R.id.editorsInfo_rv);
         }
+
     }
 
     class FooterViewHolder extends ViewHolder {
@@ -207,12 +201,10 @@ public class ThemesDailyRecyclerViewAdapter extends Adapter<ViewHolder> {
             return mDatas.size();
         }
 
-
-
         @Override
         public void onBindViewHolder(MyViewHolder holder, final int position) {
-//            Uri uri = Uri.parse(mDatas.get(position).getAvatar());
-            Uri uri = Uri.parse("http://pic4.zhimg.com/068311926_m.jpg");
+
+            Uri uri = Uri.parse(mDatas.get(position).getAvatar());
             holder.editorsAvatarCimg.setImageURI(uri);
             holder.textTv.setText(mDatas.get(position).getId());
         }
@@ -225,18 +217,15 @@ public class ThemesDailyRecyclerViewAdapter extends Adapter<ViewHolder> {
         }
 
         class MyViewHolder extends ViewHolder {
-
-            SimpleDraweeView editorsAvatarCimg;
+            CircleImageView editorsAvatarCimg;
             TextView textTv;
 
             public MyViewHolder(View view) {
                 super(view);
-                editorsAvatarCimg = (SimpleDraweeView) view.findViewById(R.id.editors_avatar_img);
+                editorsAvatarCimg = (CircleImageView) view.findViewById(R.id.editors_avatar_img);
                 textTv = (TextView) view.findViewById(R.id.texttv);
             }
-
         }
     }
-
 
 }
