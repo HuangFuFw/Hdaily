@@ -10,7 +10,6 @@ public class DailyEditorsInfo {
     private String id; //: 数据库中的唯一表示符
     private String avatar; //: 主编的头像
     private String name; //: 主编的姓名
-
     public String getAvatar() {
         return avatar;
     }

@@ -32,6 +32,7 @@ public class RecyclerViewMenuAdapter extends Adapter<ViewHolder> {
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
+        void onHeaderItemClick(View view, int position);
     }
 
     private OnItemClickListener onItemClickListener;
@@ -61,13 +62,18 @@ public class RecyclerViewMenuAdapter extends Adapter<ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         if(holder instanceof HeadererViewHolder){
-
+            ((HeadererViewHolder)holder).rlMenuHeader.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onHeaderItemClick(v,position-1);
+                }
+            });
         }else {
             ((ItemViewHolder)holder).txtDrawerItemTitle.setText(getItem(position).getName());
             ((ItemViewHolder)holder).txtDrawerItemTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onItemClick(v,position);
+                    onItemClickListener.onItemClick(v,position-1);
                 }
             });
         }

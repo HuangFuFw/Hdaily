@@ -93,7 +93,7 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
             newsContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onItemClick(position);
+                    onItemClickListener.onItemClick(position - 1);
                 }
             });
         }

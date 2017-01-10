@@ -1,6 +1,8 @@
 package com.ailk.hf.hdaily.module;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -53,36 +55,26 @@ public class ThemeFragment extends BaseFragment {
         adapter.setOnItemClickListener(new RecyclerViewMenuAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                getFragmentManager()
-                        .beginTransaction()
-// .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
-                        .replace(
-                                R.id.frame_main,
-                                ThemesDailyFragment.newInstance(data.get(position)
-                                        .getId(), data.get(position).getName()), "ThemesDaily").commit();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                Fragment fromFragment = getFragmentManager().findFragmentById(R.id.frame_main);
+                Fragment toFragment = ThemesDailyFragment.newInstance(data.get(position)
+                        .getId(), data.get(position).getName());
 
+                if (fromFragment != null && fromFragment instanceof IndexFragment) {
+                    transaction.hide(fromFragment).add(R.id.frame_main, toFragment).commit();
+                } else if (fromFragment != null && fromFragment != toFragment) {
+                    transaction.remove(fromFragment).add(R.id.frame_main, toFragment).commit(); // 隐藏当前的fragment，add下一个到Activity中
+                }
                 ((MainActivity) mActivity).closeMenu();
 
             }
+
+            @Override
+            public void onHeaderItemClick(View view, int position) {
+                ((MainActivity) mActivity).showIndex();
+            }
         });
     }
-
-//    public void switchContent() {
-//        if ()
-//
-//        getFragmentManager()
-//                .beginTransaction()
-//// .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
-//                .replace(
-//                        R.id.frame_main,
-//                        ThemesDailyFragment.newInstance(data.get(position)
-//                                .getId(), data.get(position).getName()), "ThemesDaily").commit();
-//
-//        ((MainActivity) mActivity).closeMenu();
-//
-//                ft.hide(from).add(R.id.frame_main, to).commit(); // 隐藏当前的fragment，add下一个到Activity中
-//
-//    }
 
     @Override
     protected void initData() {

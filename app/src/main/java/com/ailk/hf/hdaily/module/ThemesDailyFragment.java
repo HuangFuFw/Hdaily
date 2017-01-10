@@ -1,5 +1,6 @@
 package com.ailk.hf.hdaily.module;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -35,7 +36,7 @@ public class ThemesDailyFragment extends BaseFragment {
     private String id;
     private String title;
     private List<NewsInfo> newsInfoList = new ArrayList<>();
-//    private List<DailyEditorsInfo> editorsInfoList = new ArrayList<>();
+    //    private List<DailyEditorsInfo> editorsInfoList = new ArrayList<>();
     private ThemesDailyRecyclerViewAdapter adapter;
 
     public static final ThemesDailyFragment newInstance(String id, String title) {
@@ -87,6 +88,15 @@ public class ThemesDailyFragment extends BaseFragment {
         adapter = new ThemesDailyRecyclerViewAdapter(mActivity, newsInfoList);
         themedailyRv.setAdapter(adapter);
         themedailyRv.setItemAnimator(new DefaultItemAnimator());
+
+        adapter.setOnItemClickListener(new ThemesDailyRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(mActivity, NewsDetailsActivity.class);
+                intent.putExtra("id", newsInfoList.get(position).getId());
+                mActivity.startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -34,11 +34,11 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
+import android.widget.ImageView;
 
 import com.ailk.hf.hdaily.R;
-import com.facebook.drawee.view.SimpleDraweeView;
 
-public class CircleImageView extends SimpleDraweeView {
+public class CircleImageView extends ImageView {
 
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 
@@ -295,9 +295,13 @@ public class CircleImageView extends SimpleDraweeView {
 
     @Override
     public void setImageURI(Uri uri) {
-        super.setImageURI(uri);
-        initializeBitmap();
+//        super.setImageURI(uri);
+//        initializeBitmap();
+
+
     }
+
+
 
     @Override
     public void setColorFilter(ColorFilter cf) {
@@ -350,11 +354,11 @@ public class CircleImageView extends SimpleDraweeView {
     }
 
     private void initializeBitmap() {
-        if (mDisableCircularTransformation) {
-            mBitmap = null;
-        } else {
+//        if (mDisableCircularTransformation) {
+//            mBitmap = null;
+//        } else {
             mBitmap = getBitmapFromDrawable(getDrawable());
-        }
+//        }
         setup();
     }
 

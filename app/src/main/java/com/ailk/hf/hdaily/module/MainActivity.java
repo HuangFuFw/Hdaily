@@ -2,6 +2,7 @@ package com.ailk.hf.hdaily.module;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -39,11 +40,11 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initFragment(Bundle savedInstanceState) {
-        if(savedInstanceState==null){
-            FragmentManager fm=getSupportFragmentManager();
-            FragmentTransaction ft=fm.beginTransaction();
-            if(iFragment==null){
-                iFragment=new IndexFragment();
+        if (savedInstanceState == null) {
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            if (iFragment == null) {
+                iFragment = new IndexFragment();
             }
             ft.replace(R.id.frame_main, iFragment).commit();
         }
@@ -59,11 +60,22 @@ public class MainActivity extends BaseActivity {
         toggle.syncState();
         dragLayout.setDrawerListener(toggle);
     }
+
     public void setToolbarTitle(String text) {
         toolbar.setTitle(text);
     }
+
     public void closeMenu() {
         dragLayout.closeDrawers();
+    }
+
+    public void showIndex() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+        if (fragment instanceof ThemesDailyFragment) {
+            toolbar.setTitle("首页");
+            getSupportFragmentManager().beginTransaction().remove(fragment).show(iFragment).commit();
+        }
+        closeMenu();
     }
 
 
@@ -72,6 +84,7 @@ public class MainActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 //        Intent intent = new Intent();
@@ -97,7 +110,6 @@ public class MainActivity extends BaseActivity {
     }
 
 
-
     @Override
     public void widgetClick(View v) {
 
@@ -109,5 +121,14 @@ public class MainActivity extends BaseActivity {
         ButterKnife.unbind(this);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
+        if (fragment instanceof ThemesDailyFragment) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).show(iFragment).commit();
+            toolbar.setTitle("首页");
+        }else if(fragment instanceof IndexFragment){
+            finish();
+        }
+    }
 }

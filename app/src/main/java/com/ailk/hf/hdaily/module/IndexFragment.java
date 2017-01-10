@@ -115,9 +115,9 @@ public class IndexFragment extends BaseFragment {
         adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent=new Intent(getActivity(), NewsDetailsActivity.class);
+                Intent intent=new Intent(mActivity, NewsDetailsActivity.class);
                 intent.putExtra("id",data.get(position).getId());
-                getActivity().startActivity(intent);
+                mActivity.startActivity(intent);
 //              getActivity().startActivity(new Intent(getActivity(), NewsDetailsActivity.class));
             }
         });

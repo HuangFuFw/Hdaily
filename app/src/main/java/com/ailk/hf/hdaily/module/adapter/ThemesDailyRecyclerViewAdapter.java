@@ -16,7 +16,6 @@ import com.ailk.hf.hdaily.R;
 import com.ailk.hf.hdaily.model.DailyEditorsInfo;
 import com.ailk.hf.hdaily.model.NewsInfo;
 import com.ailk.hf.hdaily.utils.LinearLayoutManagerPlus;
-import com.ailk.hf.hdaily.widget.CircleImageView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
@@ -94,7 +93,7 @@ public class ThemesDailyRecyclerViewAdapter extends Adapter<ViewHolder> {
             newsContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onItemClick(position);
+                    onItemClickListener.onItemClick(position-1);
                 }
             });
         }
@@ -112,16 +111,8 @@ public class ThemesDailyRecyclerViewAdapter extends Adapter<ViewHolder> {
         } else if (holder instanceof HeadererViewHolder) {
             Uri uri = Uri.parse(themeDailyBgUrl);
             ((HeadererViewHolder) holder).themeDailyImg.setImageURI(uri);
-
             ((HeadererViewHolder) holder).editorsInfoRv.setLayoutManager(new LinearLayoutManagerPlus(context, LinearLayoutManager.HORIZONTAL,false));
             ((HeadererViewHolder) holder).editorsInfoRv.setAdapter(new EditorsRecyclerAdapter(context,editorsInfoList));
-//            final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-//            ((HeadererViewHolder) holder).editorsInfoRv.setLayoutManager(layoutManager);
-////            layoutManager.setOrientation(OrientationHelper.HORIZONTAL);
-//            editorsAdapter = new EditorsRecyclerAdapter(context, editorsInfoList);
-//            ((HeadererViewHolder) holder).editorsInfoRv.setAdapter(editorsAdapter);
-//            editorsAdapter.notifyDataSetChanged();
-
         }
 
     }
@@ -197,16 +188,14 @@ public class ThemesDailyRecyclerViewAdapter extends Adapter<ViewHolder> {
 
         @Override
         public int getItemCount() {
-
             return mDatas.size();
         }
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, final int position) {
-
             Uri uri = Uri.parse(mDatas.get(position).getAvatar());
             holder.editorsAvatarCimg.setImageURI(uri);
-            holder.textTv.setText(mDatas.get(position).getId());
+//            holder.textTv.setText(mDatas.get(position).getId());
         }
 
         @Override
@@ -217,13 +206,13 @@ public class ThemesDailyRecyclerViewAdapter extends Adapter<ViewHolder> {
         }
 
         class MyViewHolder extends ViewHolder {
-            CircleImageView editorsAvatarCimg;
-            TextView textTv;
+            SimpleDraweeView editorsAvatarCimg;
+//            TextView textTv;
 
             public MyViewHolder(View view) {
                 super(view);
-                editorsAvatarCimg = (CircleImageView) view.findViewById(R.id.editors_avatar_img);
-                textTv = (TextView) view.findViewById(R.id.texttv);
+                editorsAvatarCimg = (SimpleDraweeView) view.findViewById(R.id.editors_avatar_img);
+//                textTv = (TextView) view.findViewById(R.id.texttv);
             }
         }
     }
