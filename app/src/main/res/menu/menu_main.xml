@@ -3,16 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
-    <item android:id="@+id/action_edit"
-        android:title="action_edit"
+    <item android:id="@+id/action_notify"
+        android:title="action_notify"
         android:orderInCategory="80"
-        android:icon="@mipmap/hh_edit"
+        android:icon="@mipmap/ic_action_notify"
         app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/action_share"
-        android:title="action_edit"
-        android:orderInCategory="90"
-        android:icon="@mipmap/ab_share"
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="100"
+        android:title="@string/action_about"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_subscribe"
+        android:title="action_subscribe "
+        android:orderInCategory="80"
         app:showAsAction="ifRoom" />
 
 </menu>

@@ -11,10 +11,20 @@
 
     <style name="AppTheme" parent="AppTheme.Base"></style>
 
+    <!--toolbar DrawerArrowToggle图标颜色-->
     <style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
-    <item name="color">@android:color/white</item>
+        <item name="color">@android:color/white</item>
     </style>
 
+    <!--toolbar 溢出菜单更换图标-->
+    <style name="Theme.ToolBar.ActionSetting" parent="AppTheme.Base">
+        <item name="actionOverflowButtonStyle">@style/ActionButton.Overflow</item>
+    </style>
+    <style name="ActionButton.Overflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@mipmap/ic_menu_more_overflow</item>
+    </style>
+
+    <!--基础TextView-->
     <style name="commonTxt">
         <item name="android:textSize">@dimen/main_drawer_size</item>
         <item name="android:textColor">@color/white</item>

@@ -1,16 +1,13 @@
 package com.ailk.hf.hdaily.module;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ailk.hf.hdaily.R;
 import com.ailk.hf.hdaily.app.BaseFragment;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by huangfu on 2016/12/27 16.:52
@@ -52,17 +49,4 @@ public class NewsDetailsPagerFragment extends BaseFragment {
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
 }

@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_share"
+        android:icon="@mipmap/ab_share"
+        android:orderInCategory="80"
+        android:title="action_share"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_follower"
+        android:icon="@mipmap/ic_star_white_24dp"
+        android:orderInCategory="90"
+        android:title="action_follower"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/user_defined"
+        android:orderInCategory="100"
+        android:title="user_defined"
+        app:actionProviderClass="com.ailk.hf.hdaily.module.NewsActionProvider"
+        app:showAsAction="always" />
+
+
+</menu>

@@ -2,4 +2,7 @@
     <string name="app_name">Hdaily</string>
     <string name="app_author">Create by huangfu</string>
     <string name="loading">加载中...</string>
+    <string name="index_tag">首页</string>
+    <string name="action_settings">设置</string>
+    <string name="action_about">关于</string>
 </resources>

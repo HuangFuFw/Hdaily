@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/news_details_toolbar"
         android:layout_width="match_parent"
@@ -12,6 +11,8 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:titleTextColor="@color/white" />
+
+
     <TextView
         android:id="@+id/news_tail"
         android:layout_width="wrap_content"

@@ -120,6 +120,13 @@ public class IndexFragment extends BaseFragment {
                 mActivity.startActivity(intent);
 //              getActivity().startActivity(new Intent(getActivity(), NewsDetailsActivity.class));
             }
+
+            @Override
+            public void onBannerClick(int position) {
+                Intent intent=new Intent(mActivity, NewsDetailsActivity.class);
+                intent.putExtra("id",topData.get(position).getId());
+                mActivity.startActivity(intent);
+            }
         });
 
 
@@ -154,7 +161,8 @@ public class IndexFragment extends BaseFragment {
                 }
 
                 date = latestDate;
-                adapter.setTopData(info.getTop_stories());
+                topData=info.getTop_stories();
+                adapter.setTopData(topData);
                 adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }

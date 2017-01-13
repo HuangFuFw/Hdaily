@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ailk.hf.hdaily.R;
@@ -35,12 +35,13 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
     private LayoutInflater mLayoutInflater;
     private List<NewsInfo> data;
     private List<NewsInfo> topData;
-//    private List<String> dates = new ArrayList<>();
 //    private String currentDate;
 //    private String prevDate;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
+        void onBannerClick(int topPosition);
+
     }
 
     private OnItemClickListener onItemClickListener;
@@ -55,13 +56,6 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
         mLayoutInflater = LayoutInflater.from(context);
     }
 
-//    public void putDate(String date, boolean isFirst) {
-//        this.currentDate = date;
-//        dates.add(date);
-//        if (isFirst) {
-//            this.prevDate = currentDate;
-//        }
-//    }
 
     public void setTopData(List<NewsInfo> topData) {
         this.topData = topData;
@@ -88,7 +82,7 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
         return null;
     }
 
-    void bindNormalItem(final int position, TextView newsTitle, SimpleDraweeView newsIcon, LinearLayout newsContainer) {
+    void bindNormalItem(final int position, TextView newsTitle, SimpleDraweeView newsIcon, RelativeLayout newsContainer) {
         if (onItemClickListener != null) {
             newsContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -98,7 +92,14 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
             });
         }
         newsTitle.setText(getItem(position).getTitle());
-        newsIcon.setImageURI(getItem(position).getImages().get(0));
+
+        if (getItem(position).getImages() != null) {
+            newsIcon.setVisibility(View.VISIBLE);
+            newsIcon.setImageURI(getItem(position).getImages().get(0));
+        } else {
+            newsIcon.setVisibility(View.GONE);
+        }
+//        newsIcon.setImageURI(getItem(position).getImages().get(0));
     }
 
 
@@ -123,9 +124,8 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
             ((HeadererViewHolder) holder).banner.start();
             ((HeadererViewHolder) holder).banner.setOnBannerClickListener(new OnBannerClickListener() {
                 @Override
-                public void OnBannerClick(int position) {
-
-
+                public void OnBannerClick(int topPosition) {
+                    onItemClickListener.onBannerClick(topPosition-1);
                 }
             });
         }
@@ -163,13 +163,13 @@ public class RecyclerViewAdapter extends Adapter<ViewHolder> {
 
         TextView newsTitle;
         SimpleDraweeView newsIcon;
-        LinearLayout newsContainer;
+        RelativeLayout newsContainer;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             newsTitle = (TextView) itemView.findViewById(R.id.frame_main_item_title);
             newsIcon = (SimpleDraweeView) itemView.findViewById(R.id.frame_main_item_icon);
-            newsContainer = (LinearLayout) itemView.findViewById(R.id.frame_main_item_container);
+            newsContainer = (RelativeLayout) itemView.findViewById(R.id.frame_main_item_container);
         }
     }
 

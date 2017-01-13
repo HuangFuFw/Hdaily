@@ -1,8 +1,12 @@
 package com.ailk.hf.hdaily.module;
 
-import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -67,11 +71,51 @@ public class NewsDetailsActivity extends BaseActivity {
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_newsdetail, menu);
+        MenuItem item = menu.findItem(R.id.user_defined);
+        NewsActionProvider cartActionProvider = (NewsActionProvider) MenuItemCompat.getActionProvider(item);
+        cartActionProvider.setData("测试");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_follower:
+                // TODO: 2017/1/12   收藏
+                showToast("ssss");
+                break;
+            case R.id.action_share:
+                // TODO: 2017/1/12 分享
+                showToast("分享");
+                break;
+//            case R.id.action_cart:
+//                // TODO: 2017/1/12
+//                NewsActionProvider cartActionProvider=new NewsActionProvider(NewsDetailsActivity.this);
+//                cartActionProvider.setData("测试");
+//                MenuItemCompat.setActionProvider(item,cartActionProvider);
+//                break;
+        }
+        return true;
+    }
+
     private void initToolBar() {
-        newsDetailsToolbar.setTitle("新闻详情页");
-        newsDetailsToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(newsDetailsToolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //设置toolbar自带返回键为白色
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        newsDetailsToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initData() {
@@ -88,9 +132,9 @@ public class NewsDetailsActivity extends BaseActivity {
     }
 
     private void parseJson(NewsDetailInfo info) {
-        String css = "<link rel=\"stylesheet\" href=\""+info.getCss()+"\" type=\"text/css\">";
+        String css = "<link rel=\"stylesheet\" href=\"" + info.getCss() + "\" type=\"text/css\">";
         String html = "<html><head>" + css + "</head><body>" + info.getBody() + "</body></html>";
-//        html = html.replace("<div class=\"img-place-holder\">", "");
+        html = html.replace("<div class=\"img-place-holder\">", "");
         mWebView.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
 
     }

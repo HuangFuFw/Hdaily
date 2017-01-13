@@ -30,6 +30,9 @@ public class MainActivity extends BaseActivity {
 
     private IndexFragment iFragment;                     //首页fragment
 
+    private boolean mIsIndex = true;
+    private boolean mIsSubscribed = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,11 +50,12 @@ public class MainActivity extends BaseActivity {
                 iFragment = new IndexFragment();
             }
             ft.replace(R.id.frame_main, iFragment).commit();
+            mIsIndex = true;
         }
     }
 
     private void initToolBar() {
-        toolbar.setTitle("Title");
+        toolbar.setTitle(R.string.index_tag);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
@@ -61,8 +65,10 @@ public class MainActivity extends BaseActivity {
         dragLayout.setDrawerListener(toggle);
     }
 
-    public void setToolbarTitle(String text) {
-        toolbar.setTitle(text);
+    public void setToolbarStyle(String title,boolean mIsIndex) {
+        toolbar.setTitle(title);
+        this.mIsIndex = mIsIndex;
+        invalidateOptionsMenu(); //重新绘制menu
     }
 
     public void closeMenu() {
@@ -72,8 +78,8 @@ public class MainActivity extends BaseActivity {
     public void showIndex() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
         if (fragment instanceof ThemesDailyFragment) {
-            toolbar.setTitle("首页");
             getSupportFragmentManager().beginTransaction().remove(fragment).show(iFragment).commit();
+            setToolbarStyle("首页",true);
         }
         closeMenu();
     }
@@ -87,25 +93,36 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        Intent intent = new Intent();
-//        switch (item.getItemId())
-//        {
-//            case R.id.main_toolbar_search:
-//                showToast("main_toolbar_search");
-//                break;
-//            case R.id.main_toolbar_notify:
-//                intent.setClass(this,NotifyActivity.class);
-//                break;
-//        }
-//        startActivity(intent);
-//        //切换动画一定要放在startActivity后面，并且一定要先进后出
-//        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                showToast("action_settings");
+                break;
+            case R.id.action_notify:
+                showToast("action_notify");
+                break;
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        if (mIsIndex) {
+            menu.findItem(R.id.action_notify).setVisible(true);
+            menu.findItem(R.id.action_settings).setVisible(true);
+            menu.findItem(R.id.action_about).setVisible(true);
+            menu.findItem(R.id.action_subscribe).setVisible(false);
+        } else {
+            menu.findItem(R.id.action_subscribe).setVisible(true);
+            if (mIsSubscribed) {
+                menu.findItem(R.id.action_subscribe).setIcon(R.mipmap.ic_drawer_home_normal);
+            } else {
+                menu.findItem(R.id.action_subscribe).setIcon(R.mipmap.ic_drawer_home_pressed);
+            }
+            menu.findItem(R.id.action_notify).setVisible(false);
+            menu.findItem(R.id.action_settings).setVisible(false);
+            menu.findItem(R.id.action_about).setVisible(false);
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -126,8 +143,8 @@ public class MainActivity extends BaseActivity {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_main);
         if (fragment instanceof ThemesDailyFragment) {
             getSupportFragmentManager().beginTransaction().remove(fragment).show(iFragment).commit();
-            toolbar.setTitle("首页");
-        }else if(fragment instanceof IndexFragment){
+            setToolbarStyle("首页",true);
+        } else if (fragment instanceof IndexFragment) {
             finish();
         }
     }

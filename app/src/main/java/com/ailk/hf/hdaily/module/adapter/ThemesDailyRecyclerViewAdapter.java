@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ailk.hf.hdaily.R;
@@ -88,7 +88,7 @@ public class ThemesDailyRecyclerViewAdapter extends Adapter<ViewHolder> {
         return null;
     }
 
-    void bindNormalItem(final int position, TextView newsTitle, SimpleDraweeView newsIcon, LinearLayout newsContainer) {
+    void bindNormalItem(final int position, TextView newsTitle, SimpleDraweeView newsIcon, RelativeLayout newsContainer) {
         if (onItemClickListener != null) {
             newsContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,7 +99,10 @@ public class ThemesDailyRecyclerViewAdapter extends Adapter<ViewHolder> {
         }
         newsTitle.setText(getItem(position).getTitle());
         if (getItem(position).getImages() != null) {
+            newsIcon.setVisibility(View.VISIBLE);
             newsIcon.setImageURI(getItem(position).getImages().get(0));
+        }else{
+            newsIcon.setVisibility(View.GONE);
         }
     }
 
@@ -114,7 +117,6 @@ public class ThemesDailyRecyclerViewAdapter extends Adapter<ViewHolder> {
             ((HeadererViewHolder) holder).editorsInfoRv.setLayoutManager(new LinearLayoutManagerPlus(context, LinearLayoutManager.HORIZONTAL,false));
             ((HeadererViewHolder) holder).editorsInfoRv.setAdapter(new EditorsRecyclerAdapter(context,editorsInfoList));
         }
-
     }
 
 
@@ -142,13 +144,13 @@ public class ThemesDailyRecyclerViewAdapter extends Adapter<ViewHolder> {
 
         TextView newsTitle;
         SimpleDraweeView newsIcon;
-        LinearLayout newsContainer;
+        RelativeLayout newsContainer;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             newsTitle = (TextView) itemView.findViewById(R.id.frame_main_item_title);
             newsIcon = (SimpleDraweeView) itemView.findViewById(R.id.frame_main_item_icon);
-            newsContainer = (LinearLayout) itemView.findViewById(R.id.frame_main_item_container);
+            newsContainer = (RelativeLayout) itemView.findViewById(R.id.frame_main_item_container);
         }
     }
 

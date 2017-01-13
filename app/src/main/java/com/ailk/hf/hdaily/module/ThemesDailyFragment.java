@@ -68,7 +68,7 @@ public class ThemesDailyFragment extends BaseFragment {
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
-        ((MainActivity) mActivity).setToolbarTitle(title);
+        ((MainActivity) mActivity).setToolbarStyle(title,false);
         swipeRefreshLayout.setColorSchemeColors(R.color.colorPrimary);
         swipeRefreshLayout.post(new Runnable() {
             @Override
